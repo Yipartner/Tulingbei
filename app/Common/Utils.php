@@ -44,13 +44,4 @@ class Utils
         $patternMobile = '/(13\d|14[57]|15[^4,\D]|17[678]|18\d)\d{8}|170[059]\d{7}/';
         return preg_match($patternMobile, $str) == 1;
     }
-
-    public static function validateCheck(array $inputs,array $rules)
-    {
-        $validator = Validator::make($inputs,$rules);
-
-        if ($validator->fails()) {
-            throw new FormValidatorException($validator->getMessageBag()->all());
-        }
-    }
 }

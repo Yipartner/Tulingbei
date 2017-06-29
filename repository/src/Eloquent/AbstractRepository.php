@@ -14,39 +14,43 @@ use Closure;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
 use App\Repository\Contracts\RepositoryInterface;
+use Illuminate\Support\Facades\DB;
 
 abstract class AbstractRepository implements RepositoryInterface
 {
-    /** @var Model $model */
+    /**
+     * 传入要从容器中解析出的实例的完整类路径
+     * @var Model $model
+     * */
     protected $model;
 
-    function __construct(Container $app)
+    public function __construct(Container $app)
     {
         $this->model = $app->make($this->model());
     }
 
     abstract function model();
 
-    function all(array $columns = ['*'])
+    public function all(array $columns = ['*'])
     {
         return $this->model->get($columns);
     }
 
-    function get(int $id, array $columns = ['*'], string $primary = 'id')
+    public function get(string $id, array $columns = ['*'], string $primary = 'id')
     {
         return $this->model
             ->where($primary, $id)
             ->get($columns);
     }
 
-    function getBy(string $param, string $value, array $columns = ['*'])
+    public function getBy(string $param, string $value, array $columns = ['*'])
     {
         return $this->model
             ->where($param, $value)
             ->get($columns);
     }
 
-    function getByMult(array $params, array $columns = ['*'])
+    public function getByMult(array $params, array $columns = ['*'])
     {
         return $this->model
             ->where($params)
@@ -54,14 +58,14 @@ abstract class AbstractRepository implements RepositoryInterface
     }
 
     //在多个候选列表中的匹配
-    function getIn($param, array $data, array $columns = ['*'])
+    public function getIn($param, array $data, array $columns = ['*'])
     {
         return $this->model
             ->whereIn($param, $data)
             ->get($columns);
     }
 
-    function insert(array $data)
+    public function insert(array $data)
     {
         if ($this->model->timestamps) {
             $current = new Carbon();
@@ -87,7 +91,7 @@ abstract class AbstractRepository implements RepositoryInterface
             ->insert($data);
     }
 
-    function update(array $data, int $id, string $attribute = "id")
+    public function update(array $data, int $id, string $attribute = "id")
     {
         if ($this->model->timestamps) {
             $current = new Carbon();
@@ -116,7 +120,7 @@ abstract class AbstractRepository implements RepositoryInterface
     /**
      * 多条件限定查找
      */
-    function updateWhere(array $condition, array $data)
+    public function updateWhere(array $condition, array $data)
     {
         if ($this->model->timestamps) {
             $current = new Carbon();
@@ -142,20 +146,22 @@ abstract class AbstractRepository implements RepositoryInterface
     }
 
 
-    function delete(int $id): bool
+    public function delete(string $id, string $primary = 'id'): bool
     {
         //WARNING:DO NOT USE THIS FUNCTION
         return $this->model
-            ->destory($id);
+            ->where($primary, $id);
     }
 
-    function deleteWhere(array $param = [])
+    public function deleteWhere(array $param = [])
     {
         return $this->model
             ->where($param)->delete();
     }
 
-    function paginate(int $page = 1, int $size = 15, array $param = [], array $columns = ['*'])
+    // 分页方法
+
+    public function paginate(int $page = 1, int $size = 20, array $param = [], array $columns = ['*'])
     {
         if (!empty($param))
             return $this->model
@@ -170,18 +176,28 @@ abstract class AbstractRepository implements RepositoryInterface
                 ->get($columns);
     }
 
-    function getWhereCount(array $param = []):int
+    public function getWhereCount(array $param = []): int
     {
         if (!empty($param)) {
             return $this->model->where($param)->count();
-        }
-        else
+        } else
             return $this->model->count();
     }
 
-    function whereExist(Closure $func)
+    public function whereExist(Closure $func)
     {
         return $this->model->whereExists($func)->get();
+    }
+
+    // 原始方法，比较危险，需要注意
+
+    public function selectRaw(string $sql, array $condition = [])
+    {
+        if (!empty($condition)) {
+            return $this->model->select(DB::raw($sql))
+                ->where($condition)
+                ->get();
+        }
     }
 
     private function freshTimestamp(): Carbon
