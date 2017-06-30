@@ -9,7 +9,9 @@
 namespace App\Common;
 
 
+use App\Exceptions\Common\FormValidationException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * 表单验证辅助类
@@ -24,7 +26,7 @@ class ValidationHelper
         $validator = Validator::make($inputs,$rules);
 
         if ($validator->fails()) {
-            throw new FormValidatorException($validator->getMessageBag()->all());
+            throw new FormValidationException($validator->getMessageBag()->all());
         }
     }
 

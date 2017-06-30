@@ -40,7 +40,8 @@ abstract class AbstractRepository implements RepositoryInterface
     {
         return $this->model
             ->where($primary, $id)
-            ->get($columns);
+            ->get($columns)
+            ->first();
     }
 
     public function getBy(string $param, string $value, array $columns = ['*'])

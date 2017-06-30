@@ -11,6 +11,8 @@
 |
 */
 
+include 'custom/user.php';
+
 Route::get('/', function () {
     return view('welcome');
 });
