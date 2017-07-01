@@ -11,6 +11,7 @@ namespace App\Services;
 
 use App\Common\Encrypt;
 use App\Exceptions\Auth\PasswordWrongException;
+use App\Exceptions\Auth\UserExistedException;
 use App\Exceptions\Auth\UserNotExistException;
 use App\Repository\Eloquent\UserRepository;
 use App\Services\Contracts\UserServiceInterface;
@@ -39,6 +40,18 @@ class UserService implements UserServiceInterface
 
     public function register(array $userInfo): int
     {
+        // 在这里设置需要检测的字段
+
+        $uniques = [
+            'name', 'mobile', 'email'
+        ];
+
+        foreach ($uniques as $unique) {
+            if ($this->userRepository->getBy($unique, $userInfo[$unique])->count() >= 1) {
+                throw new UserExistedException($unique);
+            }
+        }
+
         if (!config('user.register_need_check')) {
             $userInfo['status'] = 1; // 直接设置成激活
         }
@@ -53,7 +66,7 @@ class UserService implements UserServiceInterface
      * @param int $userId
      * @return bool
      */
-    public function active(int $userId):bool
+    public function active(int $userId): bool
     {
         if (!config('user.register_need_check')) {
             return true;
@@ -68,7 +81,7 @@ class UserService implements UserServiceInterface
         if ($user->status == 1) {
             return true;
         } else if ($user->status == 0) {
-            return $this->userRepository->update(['status' => 1],$userId) == 1;
+            return $this->userRepository->update(['status' => 1], $userId) == 1;
         }
 
         return false;
@@ -82,9 +95,13 @@ class UserService implements UserServiceInterface
      * @return string token值
      */
 
-    public function loginBy(string $param,string $identifier,string $password,string $ip):string
+    public function loginBy(string $param, string $identifier, string $password, string $ip,int $client)
     {
-        $user = $this->userRepository->getBy($param,$identifier,['id','password'])->first();
+        // 在这里修改需要获取的字段
+
+        $user = $this->userRepository->getBy($param, $identifier, [
+            'id', 'password','name','email','mobile'
+        ])->first();
 
         if ($user == null) {
             throw new UserNotExistException();
@@ -92,25 +109,34 @@ class UserService implements UserServiceInterface
 
         // 检查密码
 
-        if (!Encrypt::check($password,$user->password)) {
+        if (!Encrypt::check($password, $user->password)) {
             throw new PasswordWrongException();
         }
 
-        return $this->tokenService->makeToken($user->id,$ip);
+        return [
+            'user' => $user,
+            'token' => $this->tokenService->makeToken($user->id, $ip,$client)
+        ];
     }
 
-    public function login(int $userId, string $ip): string
+    public function login(int $userId, string $ip,int $client): string
     {
+        $user = $this->userRepository->get($userId, [
+            'id', 'password','name','email','mobile'
+        ]);
         if (!$this->isUserExist(['id' => $userId])) {
             throw new UserNotExistException();
         }
 
-        return $this->tokenService->makeToken($userId,$ip);
+        return [
+            'user' => $user,
+            'token' => $this->tokenService->makeToken($userId, $ip,$client)
+        ];
     }
 
-    public function logout(int $userId)
+    public function logout(int $userId,int $client)
     {
-        $this->tokenService->destoryToken($userId);
+        $this->tokenService->destoryToken($userId,$client);
     }
 
     public function isUserExist(array $condition): bool

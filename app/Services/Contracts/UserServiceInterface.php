@@ -19,11 +19,11 @@ interface UserServiceInterface
 
     function active(int $userId):bool;
 
-    function loginBy(string $param,string $identifier,string $password,string $ip):string;
+    function loginBy(string $param,string $identifier,string $password,string $ip,int $client                 );
 
-    function login(int $userId,string $ip):string;
+    function login(int $userId,string $ip,int $client);
 
-    function logout(int $userId);
+    function logout(int $userId,int $client);
 
     // 辅助类函数
 

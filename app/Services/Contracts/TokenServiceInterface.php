@@ -11,14 +11,14 @@ namespace App\Services\Contracts;
 
 interface TokenServiceInterface
 {
-    function hasToken(int $userId):bool;
+    function hasToken(int $userId,int $client):bool;
 
-    function makeToken(int $userId,string $ip):string;
+    function makeToken(int $userId,string $ip,int $client):string;
     //内部是调用create和update
 
     function isTokenExpire(string $tokenStr):bool;
 
-    function destoryToken(int $userId);
+    function destoryToken(int $userId,int $client);
 
     function getUserIdByToken(string $tokenStr):int;
 }

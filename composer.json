@@ -21,7 +21,7 @@
         ],
         "psr-4": {
             "App\\": "app/",
-            "APP\\Repository\\":"repository/src/"
+            "App\\Repository\\":"repository/src/"
         }
     },
     "autoload-dev": {

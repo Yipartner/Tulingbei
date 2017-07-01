@@ -14,14 +14,14 @@ class CreateTokensTable extends Migration
     public function up()
     {
         Schema::create('tokens', function (Blueprint $table) {
-            $table->bigIncrements('id');
             $table->bigInteger('user_id');
             $table->string('token',45);
             $table->string('ip',45);
             $table->integer('client');
-            $table->bigInteger('createdAt');
-            $table->bigInteger('updatedAt');
-            $table->bigInteger('expiresAt');
+            $table->bigInteger('created_at');
+            $table->bigInteger('updated_at');
+            $table->bigInteger('expires_at');
+            $table->primary(['user_id','client']);
         });
     }
 

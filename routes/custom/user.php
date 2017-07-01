@@ -7,3 +7,4 @@
  */
 
 Route::post('/user/register','UserController@register');
+Route::post('/user/login','UserController@login');

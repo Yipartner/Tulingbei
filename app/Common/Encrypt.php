@@ -23,6 +23,6 @@ class Encrypt
 
     public static function check(string $plain, string $hashed): bool
     {
-        return Hash::check($plain . config('encrypt.salt'));
+        return Hash::check($plain . config('encrypt.salt'),$hashed);
     }
 }
