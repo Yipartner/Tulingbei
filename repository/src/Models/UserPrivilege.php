@@ -4,7 +4,8 @@ namespace App\Repository\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UserRole extends Model
+class UserPrivilege extends Model
 {
+    //
     public $timestamps = false;
 }

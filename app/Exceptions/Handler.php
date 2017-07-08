@@ -48,10 +48,10 @@ class Handler extends ExceptionHandler
             return response()->json([
                 'code' => $exception->getCode(),
                 'data' => $exception->getData()
-            ]);
+            ],400);
         }
 
-        return parent::render($request, $exception);
+//        return parent::render($request, $exception);
     }
 
     /**
