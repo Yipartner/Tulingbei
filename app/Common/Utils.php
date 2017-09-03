@@ -96,22 +96,26 @@ class Utils
     }
 
     public static function unCamelize(&$var,$separator='_'){
-        if ($var instanceof \stdClass) {
-            // 对对象的转换
-            return self::unCamelize(get_object_vars($var),$separator);
-        }
 
-        if (is_array($var)){
+        if ($var instanceof \stdClass) {
+        // 对对象的转换
+        return self::unCamelize(get_object_vars($var), $separator);
+    }
+
+        if (is_array($var)) {
             if (self::isAssoc($var)) {
                 $newKeys = [];
-                foreach ($var as $key => &$value){
+                foreach ($var as $key => &$value) {
                     if (isset($newKeys[$key])) {
                         continue;
                     }
-                    $newKey = self::unCamelizeString($key,$separator);
+                    $newKey = self::unCamelizeString($key, $separator);
                     $newKeys[$newKey] = true;
-                    $var[$newKey] =  self::unCamelize($value,$separator);
-                    unset($var[$key]);
+                    $var[$newKey] = self::unCamelize($value, $separator);
+                    if ($newKey != $key) {
+                        // 防止不变的键被删除
+                        unset($var[$key]);
+                    }
                 }
             }
         }
