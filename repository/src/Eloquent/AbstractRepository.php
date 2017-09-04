@@ -151,7 +151,7 @@ abstract class AbstractRepository implements RepositoryInterface
     {
         //WARNING:DO NOT USE THIS FUNCTION
         return $this->model
-            ->where($primary, $id);
+            ->where($primary, $id)->delete() == 1;
     }
 
     public function deleteWhere(array $param = [])

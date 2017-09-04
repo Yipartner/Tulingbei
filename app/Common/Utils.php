@@ -8,6 +8,8 @@
 
 namespace App\Common;
 
+use Illuminate\Support\Facades\Validator;
+
 class Utils
 {
     /**
@@ -50,7 +52,7 @@ class Utils
      */
     public static function isAssoc($array)
     {
-        if (is_array($array)) {
+        if(is_array($array)) {
             $keys = array_keys($array);
             return $keys !== array_keys($keys);
         }
@@ -63,44 +65,42 @@ class Utils
      * @param string $separator
      * @return mixed
      */
-    public static function camelize(&$var, $separator = '_')
+    public static function camelize(&$var,$separator='_')
     {
         if ($var instanceof \stdClass) {
             // 对对象的转换
-            return self::camelize(get_object_vars($var), $separator);
+            return self::camelize(get_object_vars($var),$separator);
         }
 
-        if (is_array($var)) {
+        if (is_array($var)){
             if (self::isAssoc($var)) {
                 $newKeys = [];
-                foreach ($var as $key => &$value) {
+                foreach ($var as $key => &$value){
                     if (isset($newKeys[$key])) {
                         continue;
                     }
-                    $newKey = self::camelizeString($key, $separator);
+                    $newKey = self::camelizeString($key,$separator);
                     $newKeys[$newKey] = true;
-                    $var[$newKey] = self::camelize($value, $separator);
-                    if ($key != $newKey) {
-                        unset($var[$key]);
-                    }
+                    $var[$newKey] =  self::camelize($value,$separator);
+                    unset($var[$key]);
                 }
             }
         }
         return $var;
     }
 
-    public static function camelizeString($uncamelized_words, $separator = '_')
+    public static function camelizeString($uncamelized_words,$separator='_')
     {
-        $uncamelized_words = $separator . str_replace($separator, " ", strtolower($uncamelized_words));
-        return ltrim(str_replace(" ", "", ucwords($uncamelized_words)), $separator);
+        $uncamelized_words = $separator. str_replace($separator, " ", strtolower($uncamelized_words));
+        return ltrim(str_replace(" ", "", ucwords($uncamelized_words)), $separator );
     }
 
-    public static function unCamelize(&$var, $separator = '_')
-    {
+    public static function unCamelize(&$var,$separator='_'){
+
         if ($var instanceof \stdClass) {
-            // 对对象的转换
-            return self::unCamelize(get_object_vars($var), $separator);
-        }
+        // 对对象的转换
+        return self::unCamelize(get_object_vars($var), $separator);
+    }
 
         if (is_array($var)) {
             if (self::isAssoc($var)) {
@@ -122,8 +122,7 @@ class Utils
         return $var;
     }
 
-    public static function unCamelizeString($camelCaps, $separator = '_')
-    {
+    public static function unCamelizeString($camelCaps,$separator='_') {
         return strtolower(preg_replace('/([a-z])([A-Z])/', "$1" . $separator . "$2", $camelCaps));
     }
 }
