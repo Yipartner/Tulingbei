@@ -7,6 +7,6 @@ class Permission extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'PermissionService';
+        return 'App\Services\PermissionService';
     }
 }
