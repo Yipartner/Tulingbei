@@ -44,7 +44,7 @@ class TokenMiddleware
 
         $tokenStr = $request->header('token');
 
-        $token = $this->tokenRepository->getBy('token',$tokenStr)->first();
+        $token = $this->tokenRepository->getBy('token',$tokenStr);
 
         if($token === null)
             throw new NeedLoginException();
