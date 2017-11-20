@@ -27,6 +27,7 @@ class CreateStudentsTable extends Migration
             $table->string('grade',10);
             $table->string('class');
             $table->string('lanqiaobei');
+            $table->string('language');
             $table->timestamps();
         });
     }

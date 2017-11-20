@@ -46,7 +46,8 @@ class StudentController extends Controller
             'email' => 'email|max:45',
             'grade' => 'required|max:10',
             'school' => 'required',
-            'school_type'=>'required'
+            'school_type'=>'required',
+            'language'=>'required',
         ];
         if($request->school_type=='本校')
         {
@@ -66,16 +67,23 @@ class StudentController extends Controller
 
         if($this->studentService->saveToDatabase($studentInfo)){
             $status = "insert success" ;
+            return response()->json([
+                'code' => 0,
+                'data' => [
+                    'status' => $status,
+                    'type' => "insert"
+                ]
+            ]);
         } else {
             $status = "update success" ;
+            return response()->json([
+                'code' => 0,
+                'data' => [
+                    'status' => $status,
+                    'type' => "update"
+                ]
+            ]);
         }
-
-        return response()->json([
-            'code' => 0,
-            'data' => [
-                'status' => $status
-            ]
-        ]);
     }
 
     public function showStudent()

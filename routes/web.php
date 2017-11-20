@@ -26,3 +26,4 @@ Route::put('/order','QueueController@updateOrderStatus');
 Route::get('/order','QueueController@getOrder');
 
 Route::delete('/order/{orderId}','QueueController@deleteOrder');
+Route::post('/addOnlineStudent','OnlineStudentController@addStudent');
