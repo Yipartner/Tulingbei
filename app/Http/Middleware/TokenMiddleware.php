@@ -15,8 +15,8 @@ class TokenMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
      * @return mixed
      */
 
@@ -39,22 +39,22 @@ class TokenMiddleware
 
         $time = Utils::createTimeStamp();
 
-        if(!$request->hasHeader('token'))
+        if (!$request->hasHeader('token'))
             throw new NeedLoginException();
 
         $tokenStr = $request->header('token');
 
-        $token = $this->tokenRepository->getBy('token',$tokenStr);
+        $token = $this->tokenRepository->getBy('token', $tokenStr);
 
-        if($token === null)
+        if ($token === null)
             throw new NeedLoginException();
 
-        if($token->expires_at < $time)
+        if ($token->expires_at < $time)
             throw new TokenExpiredException();
         $user = $this->userRepository->get($token->user_id)->first();
 
         if (config('user.register_need_check')) {
-            if($user->status == 0)
+            if ($user->status == 0)
                 throw new UserNotActivatedException();
         }
 
