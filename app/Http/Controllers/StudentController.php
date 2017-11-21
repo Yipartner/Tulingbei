@@ -65,9 +65,7 @@ class StudentController extends Controller
             $studentInfo['class']='';
             $studentInfo['stunum']='';
         }
-        return response()->json([
-            "code"=>"0",
-        ]);
+
 
         if($this->studentService->saveToDatabase($studentInfo)){
             $status = "insert success" ;
