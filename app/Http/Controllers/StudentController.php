@@ -51,10 +51,11 @@ class StudentController extends Controller
         ];
         if($request->school_type=='本校')
         {
+
+            ValidationHelper::validateCheck($request->all(), $inrules);
             return response()->json([
                 "code"=>"0",
             ]);
-            ValidationHelper::validateCheck($request->all(), $inrules);
             $studentInfo = ValidationHelper::getInputData($request, $inrules);
             $studentInfo['school']='东北大学秦皇岛分校';
         }
