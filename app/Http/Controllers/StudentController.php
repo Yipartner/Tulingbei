@@ -34,7 +34,7 @@ class StudentController extends Controller
             'class' =>'required',
             'lanqiaobei'=>'required',
             'school_type'=>'required',
-            'school'=>'max:20'
+            'school'=>'required'
         ];
         //校外
         $outrules=[
@@ -69,7 +69,7 @@ class StudentController extends Controller
         if($this->studentService->saveToDatabase($studentInfo)){
             $status = "insert success" ;
             return response()->json([
-                'code' => "0",
+                'code' => 0,
                 'data' => [
                     'status' => $status,
                     'type' => "insert"
@@ -78,7 +78,7 @@ class StudentController extends Controller
         } else {
             $status = "update success" ;
             return response()->json([
-                'code' => "0",
+                'code' => 0,
                 'data' => [
                     'status' => $status,
                     'type' => "update"
