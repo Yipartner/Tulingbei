@@ -29,7 +29,7 @@ class StudentController extends Controller
             'faculty' => 'required|max:45',
             'major' => 'required|max:50',
             'sex' => 'required|max:10',
-            'email' => 'email|max:45',
+            'email' => 'required|max:45',
             'grade' => 'required|max:10',
             'class' =>'required',
             'lanqiaobei'=>'required',
