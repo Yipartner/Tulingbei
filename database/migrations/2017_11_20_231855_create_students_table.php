@@ -15,16 +15,16 @@ class CreateStudentsTable extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name',50);
-            $table->string('stunum',15);
+            $table->string('name');
+            $table->string('stunum');
             $table->string('school_type');
             $table->string('school');
-            $table->string('mobile',20)->unique();
-            $table->string('faculty',45);
-            $table->string('major',50);
-            $table->string('sex',10);
-            $table->string('email',45);
-            $table->string('grade',10);
+            $table->string('mobile')->unique();
+            $table->string('faculty');
+            $table->string('major');
+            $table->string('sex');
+            $table->string('email');
+            $table->string('grade');
             $table->string('class');
             $table->string('lanqiaobei');
             $table->string('language');
