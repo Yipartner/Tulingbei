@@ -9,8 +9,8 @@ use App\Common\Utils;
 use App\Common\ValidationHelper;
 use App\Repository\Models\Student;
 use App\Services\StudentService;
+use Maatwebsite\Excel\Facades\Excel;
 use Validator;
-use Excel;
 
 class OnlineStudentController extends Controller
 {
@@ -95,42 +95,45 @@ class OnlineStudentController extends Controller
             ]
         ]);
     }
-//    public function exportStudent()
-//    {
-//
-//        $total_count = $this->onlineStudentService->getTotalCount();
-//        if (!empty($total_count))
-//            $data = OnlineStudents::all();//$this->studentService->getStudents(1,$total_count);
-//        else
-//            $data = null;
-//        $title=['id',
-//            'name',
-//            'stunum',
-//            'mobile',
-//            'faculty',
-//            'major',
-//            'sex',
-//            'email',
-//            'grade',
-//            'proposal',
-//        ];
-//        $cellData[]=$title;
-//        foreach ($data as $student) {
-//            $rowdata =[];
-//            foreach ($title as $key) {
-//                $rowdata[]=$student[$key];
-//            }
-//            $cellData[]=$rowdata;
-//        }
-//        Excel::create('报名表',function($excel) use ($cellData){
-//            $excel->sheet('score', function($sheet) use ($cellData){
-//                $sheet->rows($cellData);
-//            });
-//        })-> export('xls');
+    public function exportStudent(Request $request)
+    {
+
+        if ($request->password!="neuqAcm111")
+        {
+            return response()->json([
+                'code'=>'10000',
+                'message'=>'密码错误'
+            ]);
+        }
+        else {
+            $total_count = $this->onlineStudentService->getTotalCount();
+            if (!empty($total_count))
+                $data = OnlineStudents::all();//$this->studentService->getStudents(1,$total_count);
+            else
+                $data = null;
+            $title = ['id',
+                'name',
+                'mobile',
+                'email',
+            ];
+            $cellData[] = $title;
+            foreach ($data as $student) {
+                $rowdata = [];
+                foreach ($title as $key) {
+                    $rowdata[] = $student[$key];
+                }
+                $cellData[] = $rowdata;
+            }
+            Excel::create('报名表', function ($excel) use ($cellData) {
+                $excel->sheet('score', function ($sheet) use ($cellData) {
+                    $sheet->rows($cellData);
+                });
+            })->export('xls');
+        }
 //        return response()->json([
 //            'code' => 0,
 //            'status' => 'success'
 //        ]);
-//    }
+    }
 
 }
