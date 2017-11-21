@@ -24,7 +24,7 @@ class StudentController extends Controller
         //校内
         $inrules = [
             'name' => 'required|min:2|max:50',
-            'stunum' => 'required|min:6|max:15',
+            'stunum' => 'required',
             'mobile' => 'required|max:20',
             'faculty' => 'required|max:45',
             'major' => 'required|max:50',
