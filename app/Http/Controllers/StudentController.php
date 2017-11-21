@@ -34,7 +34,7 @@ class StudentController extends Controller
             'class' =>'required',
             'lanqiaobei'=>'required',
             'school_type'=>'required',
-            'school'=>'max:20'
+//            'school'=>'max:20'
         ];
         //校外
         $outrules=[
@@ -51,7 +51,7 @@ class StudentController extends Controller
         ];
         if($request->school_type=='本校')
         {
-//            ValidationHelper::validateCheck($request->all(), $inrules);
+            ValidationHelper::validateCheck($request->all(), $inrules);
             $studentInfo = ValidationHelper::getInputData($request, $inrules);
 //            $studentInfo['school']='东北大学秦皇岛分校';
         }
