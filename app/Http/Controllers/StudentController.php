@@ -69,7 +69,7 @@ class StudentController extends Controller
         if($this->studentService->saveToDatabase($studentInfo)){
             $status = "insert success" ;
             return response()->json([
-                'code' => 0,
+                'code' => "0",
 //                'data' => [
 //                    'status' => $status,
 //                    'type' => "insert"
@@ -78,7 +78,7 @@ class StudentController extends Controller
         } else {
             $status = "update success" ;
             return response()->json([
-                'code' => 0,
+                'code' => "0",
 //                'data' => [
 //                    'status' => $status,
 //                    'type' => "update"
