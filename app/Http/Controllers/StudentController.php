@@ -34,7 +34,8 @@ class StudentController extends Controller
             'class' =>'required',
             'lanqiaobei'=>'required',
             'school_type'=>'required',
-            'school'=>'required'
+            'school'=>'required',
+            'language'=>'required'
         ];
         //校外
         $outrules=[
