@@ -53,9 +53,6 @@ class StudentController extends Controller
         {
 
             ValidationHelper::validateCheck($request->all(), $inrules);
-            return response()->json([
-                "code"=>"0",
-            ]);
             $studentInfo = ValidationHelper::getInputData($request, $inrules);
             $studentInfo['school']='东北大学秦皇岛分校';
         }
@@ -68,6 +65,9 @@ class StudentController extends Controller
             $studentInfo['class']='';
             $studentInfo['stunum']='';
         }
+        return response()->json([
+            "code"=>"0",
+        ]);
 
         if($this->studentService->saveToDatabase($studentInfo)){
             $status = "insert success" ;
